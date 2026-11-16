@@ -1,0 +1,4 @@
+left_stick_position,approx_recorded_interval_seconds,dominant_peak_hz,cents_vs_neutral,measurement_status
+down,9–11,630.11,-188,exploratory_fft_peak_not_certified_F0
+center,2–4,702.39,0,exploratory_fft_peak_not_certified_F0
+up,32–34,787.82,199,exploratory_fft_peak_not_certified_F0

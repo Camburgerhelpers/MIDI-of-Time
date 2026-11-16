@@ -1,0 +1,6 @@
+physical_xbox_button,nearest_peak_note,midi_number_label,dominant_spectral_peak_hz,nominal_frequency_hz,method,certified_fundamental
+RB,D5,74,595.3,587.33,short_window_fft_dominant_peak,no
+A,F5,77,701.3,698.456,short_window_fft_dominant_peak,no
+B,A5,81,893.4,880.0,short_window_fft_dominant_peak,no
+X,B5,83,1003.0,987.767,short_window_fft_dominant_peak,no
+Y,D6,86,1190.9,1174.659,short_window_fft_dominant_peak,no
