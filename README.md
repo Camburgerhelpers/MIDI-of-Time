@@ -4,6 +4,10 @@
 
 MIDI of Time does not play any audio of its own. It sends controller input to the emulator, and the game's real Ocarina makes the sound. That includes notes, sharps and flats, slurs, pitch bends and vibrato.
 
+[![Watch: Link plays Dr. Wily Stage 1 (Mega Man 2) on the real in-game Ocarina](https://img.youtube.com/vi/Uw753Ddfy60/hqdefault.jpg)](https://www.youtube.com/watch?v=Uw753Ddfy60)
+
+▶ **[Watch the demo: Link plays Dr. Wily Stage 1 (Mega Man 2)](https://www.youtube.com/watch?v=Uw753Ddfy60)**
+
 > **Alpha release (v0.1.0-alpha).** It works well on the setup it was developed on (see [Compatibility](#compatibility)). Expect rough edges, and please report what you find.
 
 ![MIDI of Time main window](docs/screenshot-main.png)
@@ -53,17 +57,22 @@ See **[COMPATIBILITY.md](COMPATIBILITY.md)** for the full Verified / Untested / 
 
 ## Quick start
 
+**No terminal or coding needed.** Unzip it and double-click it.
+
 1. **Download and unzip** `MIDI-of-Time-0.1.0-alpha-win64.zip` anywhere you can write to, such as your Desktop or Documents.
 2. **Run `MIDI of Time.exe`.**
 3. **Press "Start game"** (top right). The first time, point it at your emulator (`lichii.exe`) and, optionally, your game file. MIDI of Time starts the emulator **with the debug link switched on for that launch only**. Your emulator's settings are never changed.
-   - Prefer starting the emulator yourself? See [Starting the emulator yourself](#starting-the-emulator-yourself).
+   - Prefer starting the emulator yourself? See [Starting the emulator yourself](#starting-the-emulator-yourself-optional-advanced) (optional, for advanced users).
 4. Load your save in the game, stand somewhere quiet, and **take out the Ocarina**. Put the controller down.
 5. When the top right shows **Game connected** (green), pick **"MIDI of Time - Demo"** and press **PLAY**.
-6. Add your own music: copy `.mid` files into the **Songs** folder next to the program, use **Open a MIDI file…**, or use **Search MIDI folder**.
+6. Add your own music, any of three ways:
+   - Copy `.mid` files into the **Songs** folder next to the program. They appear under **My songs**.
+   - Use **Open a MIDI file…** to play any single file.
+   - Use **Search MIDI folder** to search your whole collection. The first time, the app asks which folder holds your MIDI files (subfolders included). Change it later in **Advanced… → Settings…**.
 
 > ⚠️ **Only press Play while Link is holding the Ocarina.** The app presses real controller buttons. Anywhere else, such as a menu or normal gameplay, those presses control Link. Press **Stop**, **D-pad down**, or **D-pad left/right** on your controller at any time to stop and release everything.
 
-### Starting the emulator yourself
+### Starting the emulator yourself (optional, advanced)
 
 The debug server is switched on by an environment variable that the emulator reads at launch. For example, in PowerShell:
 
