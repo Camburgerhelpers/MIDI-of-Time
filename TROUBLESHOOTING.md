@@ -6,8 +6,8 @@ The status in the top right of the window tells you where you are:
 |---|---|---|
 | **Game connected** (green) | The debug server is answering. | Take out the Ocarina, then press Play. |
 | **Game not running** | No emulator was found. | Press **Start game**. |
-| **Connected: … (untested)** (amber) | An emulator build other than the verified Fritchii v5.8.4 answered with the expected debug server. | Playback is allowed, but untested. Please report how it goes. |
-| **Incompatible emulator** (red) | The debug server answered, but without the input command MIDI of Time needs (for example, current zortos293 builds). | Use Fritchii v5.8.4 (see COMPATIBILITY.md). |
+| **Connected: … (untested)** (amber) | An emulator build other than the verified Fritchii v6.1 / v5.8.4 answered with the expected debug server. | Playback is allowed, but untested. Please report how it goes. |
+| **Incompatible emulator** (red) | The debug server answered, but without the input command MIDI of Time needs (for example, current zortos293 builds). | Use Fritchii v6.1 or v5.8.4 (see COMPATIBILITY.md). |
 | **Stopped** (amber), *"you used D-pad left/right"* | The kill switch stopped playback because you put the Ocarina away or opened the song menu. | Take the Ocarina out again, then press Play. |
 | **Game running without the debug link** (amber) | The emulator is running, but it was started without the debug server. | Close the emulator and press **Start game** in MIDI of Time, or start it yourself with the environment variable (see README). |
 
@@ -42,7 +42,7 @@ The status in the top right of the window tells you where you are:
 - Your emulator has a debug server, but not the expected one. Only the build listed in the README is tested.
 
 **Start game can't find the emulator.**
-- Open **Advanced… → Settings…** and set the emulator path. Use the emulator's main `.exe` (for Fritchii, `lichii.exe`).
+- Open **Advanced… → Settings…** and set the emulator path. Use the emulator's main `.exe` (for Fritchii v6, `fritchii.exe`; for v5, `lichii.exe`). On v6, starting the small `lichii.exe` also works: it forwards to `fritchii.exe` with the same settings.
 
 **Search MIDI folder is slow.**
 - Without Everything, the first search scans the whole folder; later searches are fast.

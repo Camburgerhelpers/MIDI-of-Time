@@ -7,13 +7,13 @@ The MIDI engine produces emulator-neutral steps:
 A Backend delivers those steps to one kind of emulator. To support another emulator later, add a class
 with the same methods and put it in BACKENDS. Nothing in the engine or the arranger has to change.
 
-Only one configuration is VERIFIED: Fritchii v5.8.4 with the NX2 debug server (see COMPATIBILITY.md).
+VERIFIED configurations: Fritchii v5.8.4 (30 FPS) and Fritchii v6.1 (60 FPS) with the NX2 debug server (see COMPATIBILITY.md).
 """
 import json, socket, time
 
 OOT_PROGRAM_ID = '0400486024DEC000'
 # (emulator name, version) pairs tested end to end with real playback. Everything else is "untested".
-VERIFIED = {('Fritchii', '5.8.4')}
+VERIFIED = {('Fritchii', '5.8.4'), ('Fritchii', '6.1')}
 
 
 class Info:
@@ -116,7 +116,7 @@ class NX2DebugServer:
         else:
             state = 'untested'
             msg = (f'{build or "Unknown emulator build"}: not tested with MIDI of Time. It has the expected debug server, '
-                   'so playback may work - please report results. Verified: Fritchii v5.8.4.')
+                   'so playback may work - please report results. Verified: Fritchii v5.8.4 and v6.1.')
         if pid and pid.upper() != OOT_PROGRAM_ID:
             msg += ' The running game does not look like the Ocarina of Time remake.'
         return Info(state, msg, emu, ver, fps, pid, build)

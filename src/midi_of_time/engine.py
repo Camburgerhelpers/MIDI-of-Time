@@ -324,6 +324,57 @@ def apply_breaths(steps, limit, br, look, st):
     return out
 
 
+def ensure_breaths(steps, limit=189, br=4, look=75):
+    """After the engine's apply_breaths: make sure no stretch of sound runs longer than `limit` frames without a
+    release of at least `br` frames (the game only refills breath on >= 4-frame releases; the sound dies ~6.8 s
+    after the last one). In very fast passages every note is 2-3 frames, so the engine finds no note long enough
+    to lend a breath and gives up. Here the breath frames are borrowed from several notes before the chosen spot
+    (each keeps at least 1 frame; if that is not enough, the shortest notes nearest the spot are dropped).
+    Timing is unchanged: the total number of frames stays the same. Returns (steps, info)."""
+    out = [dict(s) for s in steps]
+    info = {'added': 0, 'notes_dropped': 0}
+    i, run = 0, 0
+    while i < len(out):
+        s = out[i]
+        if not s['buttons'] and s['frames'] >= br:
+            run = 0; i += 1; continue
+        if run + s['frames'] <= limit:
+            run += s['frames']; i += 1; continue
+        # choose the boundary j (between out[j-1] and out[j]) in the last `look` frames with the longest note before it
+        best, t, j = None, run, i
+        while j > 0 and run - t <= look:
+            prev = out[j - 1]
+            if prev['buttons']:
+                score = prev['frames']
+                if best is None or score > best[0]:
+                    best = (score, j)
+            t -= prev['frames']; j -= 1
+            if not prev['buttons'] and prev['frames'] >= br:
+                break
+        if best is None:
+            run += s['frames']; i += 1; continue
+        j = best[1]
+        need, k = br, j - 1
+        # 1) borrow frames from the notes before the spot, keeping each note at least 1 frame
+        while need > 0 and k >= 0 and run - sum(x['frames'] for x in out[k:j]) >= -look:
+            if out[k]['buttons'] and out[k]['frames'] > 1:
+                take = min(need, out[k]['frames'] - 1)
+                out[k]['frames'] -= take; need -= take
+            k -= 1
+        # 2) still short: drop whole short notes just before the spot
+        k = j - 1
+        while need > 0 and k >= 0:
+            if out[k]['buttons']:
+                need -= out[k]['frames']; out[k]['frames'] = 0; info['notes_dropped'] += 1
+            k -= 1
+        freed = br - need                                     # need <= 0 here: freed >= br
+        out.insert(j, {'buttons': [], 'left_stick': [0, 0], 'frames': freed})
+        out = [x for x in out if x['frames'] > 0]
+        info['added'] += 1
+        i, run = 0, 0                                         # rescan (a few thousand steps at most)
+    return out, info
+
+
 def build_steps(notes, fps, a, bend, mod, t_of_frame):
     """notes: (on_f, off_f, legato_bool, midi, ch). Returns steps and stats."""
     steps, cur, breath, prev = [], 0, 0, None
@@ -397,6 +448,9 @@ def build_steps(notes, fps, a, bend, mod, t_of_frame):
         k += 1
     rest(10)
     steps = apply_breaths(steps, BREATH, max(4, round(4 * k30)), int(75 * k30), st)
+    # fast slurred runs: no single note can lend a breath, so borrow it from several (2026-11-18, ported from Smart v2)
+    steps, binfo = ensure_breaths(steps, BREATH, max(4, round(4 * k30)), int(75 * k30))
+    st['breaths'] += binfo['added']; st['dropped'] += binfo['notes_dropped']
     return steps, st, cur + 10
 
 

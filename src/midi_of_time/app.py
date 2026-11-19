@@ -211,12 +211,17 @@ def release_all():
     BACKEND.release()
 
 
-def game_running(exe_name='lichii.exe'):
-    exe_name = (exe_name or 'lichii.exe').lower()
+# Emulator program names. Fritchii v6+ runs as fritchii.exe and keeps a small lichii.exe forwarder next to it;
+# Fritchii v5.x and other Lichii builds run as lichii.exe.
+KNOWN_EMULATOR_EXES = ('fritchii.exe', 'lichii.exe')
+
+
+def game_running(exe_name=''):
+    names = {n.lower() for n in (exe_name, *KNOWN_EMULATOR_EXES) if n}
     try:
-        out = subprocess.run(['tasklist', '/FI', f'IMAGENAME eq {exe_name}', '/NH'], capture_output=True,
-                             text=True, creationflags=NOWIN, timeout=5).stdout
-        return exe_name in out.lower()
+        out = subprocess.run(['tasklist', '/FO', 'CSV', '/NH'], capture_output=True,
+                             text=True, creationflags=NOWIN, timeout=5).stdout.lower()
+        return any(f'"{n}"' in out for n in names)
     except (OSError, subprocess.SubprocessError):
         return False
 
@@ -739,7 +744,7 @@ class App(tk.Tk):
 
         def work():
             info = BACKEND.probe()
-            running = info.state != 'offline' or game_running(Path(self.state.get('emulator') or 'lichii.exe').name)
+            running = info.state != 'offline' or game_running(Path(self.state.get('emulator') or '').name)
             self.after(0, self.status_result, info, running)
         threading.Thread(target=work, daemon=True).start()
 
@@ -774,7 +779,7 @@ class App(tk.Tk):
     def start_game(self):
         exe = self.state.get('emulator') or ''
         if not exe or not Path(exe).is_file():
-            exe = filedialog.askopenfilename(title='Find your emulator (for example lichii.exe)',
+            exe = filedialog.askopenfilename(title='Find your emulator (for example fritchii.exe)',
                                              filetypes=[('Programs', '*.exe')])
             if not exe:
                 return
@@ -862,7 +867,7 @@ class App(tk.Tk):
             v = tk.StringVar(value=self.state.get(key, '')); rows[key] = v
             tk.Entry(f, textvariable=v, bg=BG, fg=INK, insertbackground=INK, relief='flat').pack(side='left', fill='x', expand=True, ipady=4)
             self.btn(f, 'Browse…', lambda: v.set(pick() or v.get())).pack(side='left', padx=(8, 0))
-        row('Emulator program (with the NX2 debug server, e.g. Fritchii lichii.exe)', 'emulator',
+        row('Emulator program (with the NX2 debug server: fritchii.exe for Fritchii v6, lichii.exe for v5)', 'emulator',
             lambda: filedialog.askopenfilename(filetypes=[('Programs', '*.exe')]))
         row('Game file (optional)', 'game', lambda: filedialog.askopenfilename(
             filetypes=[('Game files', '*.nup *.nsp *.xci *.nca'), ('All files', '*.*')]))

@@ -8,7 +8,7 @@ MIDI of Time does not play any audio of its own. It sends controller input to th
 
 ▶ **[Watch the demo: Link plays Dr. Wily Stage 1 (Mega Man 2)](https://www.youtube.com/watch?v=Uw753Ddfy60)**
 
-> **Alpha release (v0.1.0-alpha).** It works well on the setup it was developed on (see [Compatibility](#compatibility)). Expect rough edges, and please report what you find.
+> **Alpha release (v0.1.1-alpha).** It works well on the setup it was developed on (see [Compatibility](#compatibility)). Expect rough edges, and please report what you find.
 
 ![MIDI of Time main window](docs/screenshot-main.png)
 
@@ -40,7 +40,7 @@ MIDI of Time does not play any audio of its own. It sends controller input to th
 
 | | |
 |---|---|
-| **Emulator** | **Fritchii v5.8.4** (Eden/Lichii fork), Windows x64 |
+| **Emulator** | **Fritchii v6.1** (60 FPS mode) or **v5.8.4** (30 FPS mode), Eden/Lichii fork, Windows x64 |
 | **Required feature** | Its **NX2 debug server**, switched on by starting the emulator with `EDEN_NX2_DEBUG_SERVER=127.0.0.1:6545` (**Start game** in MIDI of Time does this for you) |
 | **Game** | *The Legend of Zelda: Ocarina of Time* remake (your own legally obtained copy) |
 | **In-game setting** | Ocarina controls: **Classic** |
@@ -59,9 +59,9 @@ See **[COMPATIBILITY.md](COMPATIBILITY.md)** for the full Verified / Untested / 
 
 **No terminal or coding needed.** Unzip it and double-click it.
 
-1. **Download and unzip** `MIDI-of-Time-0.1.0-alpha-win64.zip` anywhere you can write to, such as your Desktop or Documents.
+1. **Download and unzip** `MIDI-of-Time-0.1.1-alpha-win64.zip` anywhere you can write to, such as your Desktop or Documents.
 2. **Run `MIDI of Time.exe`.**
-3. **Press "Start game"** (top right). The first time, point it at your emulator (`lichii.exe`) and, optionally, your game file. MIDI of Time starts the emulator **with the debug link switched on for that launch only**. Your emulator's settings are never changed.
+3. **Press "Start game"** (top right). The first time, point it at your emulator (`fritchii.exe` for Fritchii v6, `lichii.exe` for v5) and, optionally, your game file. MIDI of Time starts the emulator **with the debug link switched on for that launch only**. Your emulator's settings are never changed.
    - Prefer starting the emulator yourself? See [Starting the emulator yourself](#starting-the-emulator-yourself-optional-advanced) (optional, for advanced users).
 4. Load your save in the game, stand somewhere quiet, and **take out the Ocarina**. Put the controller down.
 5. When the top right shows **Game connected** (green), pick **"MIDI of Time - Demo"** and press **PLAY**.
@@ -77,7 +77,7 @@ See **[COMPATIBILITY.md](COMPATIBILITY.md)** for the full Verified / Untested / 
 The debug server is switched on by an environment variable that the emulator reads at launch. For example, in PowerShell:
 
 ```powershell
-$env:EDEN_NX2_DEBUG_SERVER = '127.0.0.1:6545'; & 'C:\path\to\lichii.exe'
+$env:EDEN_NX2_DEBUG_SERVER = '127.0.0.1:6545'; & 'C:\path\to\fritchii.exe'
 ```
 
 The variable only affects emulators started from that same window. The server listens on your own PC only (`127.0.0.1`).
@@ -132,7 +132,7 @@ The research notes separate **measured** results from **derived or predicted** b
 - **The app can't detect whether the Ocarina is out.** See the warning above. The D-pad kill switch only reacts to *you* pressing D-pad left/right; if the game itself takes the Ocarina away (a cutscene, getting hit), press Stop or D-pad down.
 - **Kill switch and shortcuts need an XInput controller.** Other controllers are not watched (the log says "no XInput controller found").
 - **Smart mode guesses** which part carries the tune, and sometimes guesses wrong. Switch to **One part**, or choose the part in Advanced, then save it as the song's default.
-- **Only Fritchii v5.8.4 is verified.** Other builds are untested or incompatible (see [COMPATIBILITY.md](COMPATIBILITY.md)).
+- **Verified: Fritchii v6.1 (60 FPS) and v5.8.4 (30 FPS).** Other builds are untested or incompatible (see [COMPATIBILITY.md](COMPATIBILITY.md)).
 - **Very fast passages** (faster than about 15 notes per second) skip some notes.
 - **A MIDI track named `[Link]`** always wins in One part mode. Use this for arrangements you make yourself.
 

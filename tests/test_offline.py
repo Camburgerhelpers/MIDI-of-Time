@@ -122,7 +122,7 @@ def fritchii(build):
             return {'id': req['id'], 'result': {'frames': sum(s['frames'] for s in req['params']['steps']), 'first_present': 1, 'elapsed_s': 0.1}}
         return {'id': req['id'], 'error': 'unknown method'}
     return h
-cases = [(19101, fritchii('Fritchii v5.8.4 '), 'verified'), (19102, fritchii('Fritchii v6.0 '), 'untested'),
+cases = [(19101, fritchii('Fritchii v5.8.4 '), 'verified'), (19102, fritchii('Fritchii v6.0 '), 'untested'), (19106, fritchii('Fritchii v6.1 '), 'verified'),
          (19103, fritchii('Lichii build-177'), 'untested'),
          (19104, lambda r: {'id': r['id'], 'error': 'unknown method'}, 'incompatible'),
          (19105, lambda r: ({'id': r['id'], 'result': {'build': 'X 1.0'}} if r['method'] == 'status' else {'id': r['id'], 'error': 'unknown method'}), 'incompatible')]
@@ -181,6 +181,20 @@ for _name, _notes in (('staccato', [(i * 6, i * 6 + 5, False, 74 + (i % 5) * 2, 
         else: _r += _s['frames']; _worst = max(_worst, _r)
     check(f'breathing: {_name} never runs out of breath', _worst <= P.BREATH, _worst)
     check(f'breathing: {_name} keeps song timing', sum(_s['frames'] for _s in _steps) == _total and all(_s['frames'] > 0 for _s in _steps))
+
+# 12. fast slurred runs (2026-11-18, Bloody Tears): every note is too short to lend a whole breath, so breaths must be
+#     borrowed from several notes. Checked at 30 and 60 FPS (breath limits scale with the game's frame rate).
+for _fps in (30, 60):
+    _k = _fps // 30
+    _fast = [(i * 4 * _k, i * 4 * _k + 4 * _k, True, 74 + (i % 5) * 2, 0) for i in range(600)]   # ~80 s of 0.13 s notes, no gaps
+    _steps, _st, _total = P.build_steps(_fast, _fps, _a, _z, _z, lambda f: f / _fps)
+    _br, _lim = max(4, round(4 * _fps / 30)), int(P.BREATH * _fps / 30)
+    _worst = _r = 0
+    for _s in _steps:
+        if not _s['buttons'] and _s['frames'] >= _br: _r = 0
+        else: _r += _s['frames']; _worst = max(_worst, _r)
+    check(f'breathing: fast slur run at {_fps} FPS never runs out of breath', _worst <= _lim, f'{_worst} > {_lim} frames')
+    check(f'breathing: fast slur run at {_fps} FPS keeps song timing', sum(_s['frames'] for _s in _steps) == _total and all(_s['frames'] > 0 for _s in _steps))
 
 print(f'\n{ok} passed, {fail} failed')
 sys.exit(1 if fail else 0)

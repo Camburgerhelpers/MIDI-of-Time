@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1-alpha — Fritchii v6 and 60 FPS
+
+- **Fritchii v6.1 verified** (60 FPS mode): tempo, fast passages, held notes and the D-pad kill switch tested in game.
+- **Breathing fix for fast slurred runs.** When every note is too short to lend a whole breath (e.g. Bloody Tears, long runs of ~0.13 s notes with no gaps), the breath is now borrowed from several notes. Before, such runs could go 20+ seconds without a breath and the Ocarina went silent. Song timing is unchanged; at 30 FPS and 60 FPS alike.
+- Fritchii v6 support: the app recognizes the emulator running as `fritchii.exe` (v6) as well as `lichii.exe` (v5 and the v6 forwarder). Before, a Fritchii v6 started outside MIDI of Time could show as "Game not running".
+- Settings and file pickers suggest `fritchii.exe` for Fritchii v6.
+- 60 FPS timing (already automatic in 0.1.0) is now tested: the breath limit follows real time (~6.3 s), measured on v6.1.
+- Docs: README, TROUBLESHOOTING and COMPATIBILITY updated for v6.
+
 ## 0.1.0-alpha — first public alpha
 
 - Desktop app:
